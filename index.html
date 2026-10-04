@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>frontend-aesthetic-skill · Design</title>
+<style>
+  :root {
+    --paper: #f2eee5;
+    --ink: #25231f;
+    --accent: #d63823;
+    --cream: #efc6a4;
+    --brown: #2e262b;
+    --dark-red: #b33020;
+    --red: #bc3729;
+    --grey: #ada79c;
+    --rule: 2px solid var(--ink);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: Arial, 'Helvetica Neue', sans-serif; }
+
+  /* ① 字体系统：sans masthead 900 + serif 正文；标签层 2px 字距 */
+  .masthead {
+    font-family: Arial, sans-serif;
+    font-weight: 900;
+    font-size: clamp(13px, 1.6vw, 18px);
+    letter-spacing: -0.09em;
+  }
+  .tag, .meta, .label, .no, .foot, .k {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  h1, h2, .serif, .quote {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: normal;
+  }
+
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ② 色板角色 + ③ 报头/规则线 */
+  header.page-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 18px 4vw;
+    border-bottom: var(--rule);
+  }
+
+  .mast {
+    padding: 6vh 4vw 3vh;
+    border-bottom: var(--rule);
+  }
+  .mast h1 {
+    font-size: clamp(90px, 22vw, 340px);
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+  .mast h1 .o { color: var(--accent); }
+  .mast .strap {
+    display: flex; justify-content: space-between;
+    margin-top: 1.5vh; border-top: var(--rule); padding-top: 8px;
+  }
+
+  /* ③ 三栏不对称 */
+  .layout {
+    display: grid;
+    grid-template-columns: 1.1fr 1.7fr 0.8fr;
+    border-bottom: var(--rule);
+  }
+  .layout > section { padding: 5vh 2.2vw; }
+  .layout > section + section { border-left: var(--rule); }
+
+  .sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 3vh; }
+  .sec-head .label { background: var(--ink); color: var(--paper); padding: 4px 10px; }
+  .sec-head .no { color: var(--grey); }
+
+  /* intro：理念 */
+  .intro .idea { padding: 14px 0; border-bottom: 1px solid var(--ink); }
+  .intro .idea:last-child { border-bottom: none; }
+  .intro .idea .no { display: block; margin-bottom: 6px; color: var(--red); }
+  .intro .idea .serif { font-size: 17px; display: block; margin-bottom: 4px; }
+  .intro .idea p { font-size: 12px; line-height: 1.8; color: var(--brown); }
+
+  /* art：8 维网络 */
+  .dim-list { list-style: none; }
+  .dim-list li {
+    display: flex; gap: 16px; align-items: baseline;
+    padding: 11px 0; border-bottom: 1px solid var(--ink);
+  }
+  .dim-list .n {
+    font-family: Georgia, serif; font-size: 22px;
+    color: var(--accent); min-width: 30px;
+  }
+  .dim-list .t { font-size: 14px; font-weight: 700; min-width: 88px; }
+  .dim-list .d { font-size: 12px; color: var(--brown); line-height: 1.6; }
+  .pipeline {
+    margin-top: 2.6vh; border-top: var(--rule); border-bottom: var(--rule);
+    padding: 14px 0; font-size: 11px; letter-spacing: 1px; line-height: 2;
+    color: var(--ink);
+  }
+  .pipeline b { color: var(--dark-red); }
+
+  /* sidebar：预设卡 + 验证 */
+  .card-list { display: flex; flex-direction: column; gap: 2.4vh; }
+  .preset {
+    border: 2px solid var(--ink);
+    padding: 14px;
+    transition: transform .8s cubic-bezier(.2,.7,.2,1), border-radius .8s;
+  }
+  .preset:hover { transform: rotate(-1deg) skewY(0.6deg); border-radius: 6px; }
+  .preset .en { font-family: Georgia, serif; font-size: 19px; display: block; margin-bottom: 4px; }
+  .preset .cn { font-size: 12px; color: var(--brown); display: block; margin-bottom: 8px; }
+  .preset .meta { color: var(--grey); }
+  .verify { margin-top: 2.6vh; }
+  .verify .row {
+    display: flex; justify-content: space-between; padding: 8px 0;
+    border-bottom: 1px solid var(--ink); font-size: 11px; letter-spacing: 1px;
+  }
+  .verify .ok { color: var(--dark-red); font-weight: 700; }
+
+  /* 验证证据区 */
+  .evidence { border-bottom: var(--rule); }
+  .evidence .head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 3vh 4vw; border-bottom: var(--rule);
+  }
+  .evidence .grid {
+    display: grid; grid-template-columns: 1.1fr 1.7fr 0.8fr;
+  }
+  .evidence .cell { padding: 4vh 2.2vw; }
+  .evidence .cell + .cell { border-left: var(--rule); }
+  .evidence .exp { display: block; font-family: Georgia, serif; font-size: 24px; margin-bottom: 10px; }
+  .evidence .verdict { font-size: 12px; line-height: 1.9; color: var(--brown); }
+  .evidence .verdict b { color: var(--dark-red); }
+  .evidence .link { display: inline-block; margin-top: 14px; font-size: 10px; letter-spacing: 2px; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+
+  /* 折叠：使用协议 */
+  details.protocol {
+    border-bottom: var(--rule);
+    margin: 0 4vw;
+  }
+  details.protocol summary {
+    list-style: none; display: flex; justify-content: space-between;
+    padding: 18px 0; cursor: pointer;
+  }
+  details.protocol summary::-webkit-details-marker { display: none; }
+  details.protocol .body {
+    font-size: 13px; line-height: 2;
+    padding: 0 0 4vh; max-width: 700px;
+  }
+  details.protocol .body ul { padding-left: 1.4em; }
+  details.protocol .body .mode { margin-bottom: 2vh; }
+  details.protocol .body b { font-family: Georgia, serif; font-weight: normal; font-size: 15px; }
+
+  footer.page-foot {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 18px 4vw; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  }
+  footer.page-foot a { color: var(--ink); }
+
+  @media (max-width: 860px) {
+    .layout, .evidence .grid { grid-template-columns: 1fr; }
+    .layout > section + section, .evidence .cell + .cell { border-left: none; border-top: var(--rule); }
+    .mast h1 { font-size: clamp(90px, 30vw, 220px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .preset { transition: none; }
+    .preset:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="masthead">FORM·AESTHETIC</div>
+  <div class="meta">FRONTEND AESTHETIC SKILL · v0.2 · 前端审美</div>
+</header>
+
+<section class="mast" aria-label="刊名">
+  <h1>F<span class="o">O</span>RM</h1>
+  <div class="strap">
+    <span class="tag">把万分之一审美翻译成可执行约束</span>
+    <span class="tag">AESTHETIC AS A FORM · 8-DIMENSION CONSTRAINT NETWORK</span>
+  </div>
+</section>
+
+<main class="layout">
+  <!-- 左栏：理念 -->
+  <section class="intro">
+    <div class="sec-head">
+      <span class="label">01 为什么</span>
+      <span class="no">PROBLEM</span>
+    </div>
+    <div class="idea">
+      <span class="no">趋向性 · 不是能力</span>
+      <span class="serif">AI 前端难看，是趋向问题。</span>
+      <p>模型输出趋近训练分布均值——"平庸但不出错"。审美在分布长尾的人，与均值输出之间存在结构性错位。</p>
+    </div>
+    <div class="idea">
+      <span class="no">约束 · 不是形容词</span>
+      <span class="serif">好形容词拽不动模型。</span>
+      <p>"好看""高级"会被训练先验吞噬；token 级值域、白名单、禁区，才真正改变输出分布。</p>
+    </div>
+    <div class="idea">
+      <span class="no">无缝隙 · 全覆盖</span>
+      <span class="serif">模型会用先验填补所有缝隙。</span>
+      <p>约束网络必须覆盖全部 8 个维度，不留一个让模型"自己发挥"的口子。</p>
+    </div>
+    <div class="idea">
+      <span class="no">闸门 · 可量化</span>
+      <span class="serif">审美裁决权在人，机器只做可测检查。</span>
+      <p>L1 几何量化 → L2 参考对齐 → L3 人工评审，三层闸门各司其职。</p>
+    </div>
+  </section>
+
+  <!-- 中栏：8 维网络 -->
+  <section class="art">
+    <div class="sec-head">
+      <span class="label">02 约束网络</span>
+      <span class="no">8 DIMENSIONS</span>
+    </div>
+    <ol class="dim-list">
+      <li><span class="n">1</span><span class="t">字体系统</span><span class="d">白名单 + 角色三分（display/body/mono）+ 高对比配对；禁 Inter/Roboto</span></li>
+      <li><span class="n">2</span><span class="t">色板角色表</span><span class="d">背景/表面/边框/正文/强调五角色；主导色+锐利强调；禁紫渐变白底</span></li>
+      <li><span class="n">3</span><span class="t">间距与网格</span><span class="d">8pt 网格遵守；列比显式不对称；clamp 字号梯度 3x+</span></li>
+      <li><span class="n">4</span><span class="t">动效参数</span><span class="d">时长/缓动显式（0.8-1.4s）；聚焦高影响时刻；尊重 reduced-motion</span></li>
+      <li><span class="n">5</span><span class="t">背景质感</span><span class="d">≥2 层质感；纯 CSS 绘制零外部资产；禁纯色平铺</span></li>
+      <li><span class="n">6</span><span class="t">风格方向词</span><span class="d">一个词锁定气质；具象参考（印刷史/建筑/IDE 主题）</span></li>
+      <li><span class="n">7</span><span class="t">结构与内容</span><span class="d">页面区块显式清单；demo 数据必须"活"；虚构数据标 illustrative</span></li>
+      <li><span class="n">8</span><span class="t">可访问与交付</span><span class="d">语义 HTML / aria / 可见焦点；输出完整 + 8 维自检清单</span></li>
+    </ol>
+    <div class="pipeline">
+      <b>机制</b>：风格方向词 → Skill 展开 8 维约束模板 → 约束注入（system prompt / CLAUDE.md）→ 产物自检（8 维逐项）→ 量化闸门（L1/L2/L3）
+    </div>
+  </section>
+
+  <!-- 右栏：预设卡 + 验证 -->
+  <section class="sidebar">
+    <div class="sec-head">
+      <span class="label">03 预设卡</span>
+      <span class="no">PRESETS</span>
+    </div>
+    <div class="card-list">
+      <div class="preset">
+        <span class="en">Swiss Print</span>
+        <span class="cn">瑞士印刷风 · 新闻纸色系 + 不对称网格</span>
+        <span class="meta">样本 002 · FORM</span>
+      </div>
+      <div class="preset">
+        <span class="en">Aurora Ambience</span>
+        <span class="cn">氛围艺术风 · 近黑底 + 薄荷/蓝极光 + 玻璃拟态</span>
+        <span class="meta">样本 001 · Vesper</span>
+      </div>
+      <div class="preset">
+        <span class="en">Architectural Stillness</span>
+        <span class="cn">建筑静默风 · 土色系 + 大留白 + CSS 建筑插画</span>
+        <span class="meta">样本 004 · Dune</span>
+      </div>
+    </div>
+    <div class="verify">
+      <div class="sec-head">
+        <span class="label">04 验证</span>
+        <span class="no">A/B × 3</span>
+      </div>
+      <div class="row"><span>ab1 · Swiss 咖啡馆</span><span class="ok">B 脱离均值 ✓</span></div>
+      <div class="row"><span>ab2 · 极光电台</span><span class="ok">B 脱离均值 ✓</span></div>
+      <div class="row"><span>ab3 · 山间石屋</span><span class="ok">B 脱离均值 ✓</span></div>
+    </div>
+  </section>
+</main>
+
+<!-- 验证证据区 -->
+<section class="evidence" aria-label="A/B 验证证据">
+  <div class="head">
+    <span class="tag">05 验证证据 · 同题材 A/B，普通模型执行</span>
+    <span class="no">A = 一句话方向词 / B = 8 维指标注入</span>
+  </div>
+  <div class="grid">
+    <div class="cell">
+      <span class="exp">ab1</span>
+      <p class="verdict"><b>Swiss 咖啡馆</b>：A 版落入居中 + Playfair/Inter + 圆角模板；B 版呈现三栏不对称 + 巨型刊名 + 印刷色系。</p>
+      <a class="link" href="examples/ab1-cafe-constraints.html" target="_blank">打开 B 版 →</a>
+    </div>
+    <div class="cell">
+      <span class="exp">ab2</span>
+      <p class="verdict"><b>极光电台</b>：A 版落入"极光=紫色渐变 + Orbitron"均值联想；B 版近黑 + 薄荷绿/蓝（禁紫）+ 玻璃拟态。</p>
+      <a class="link" href="examples/ab2-radio-constraints.html" target="_blank">打开 B 版 →</a>
+    </div>
+    <div class="cell">
+      <span class="exp">ab3</span>
+      <p class="verdict"><b>山间石屋</b>：A 版导航+居中+占位色块模板；B 版 36/64 不对称 + 纯 CSS 建筑插画 + 日光切换。</p>
+      <a class="link" href="examples/ab3-house-constraints.html" target="_blank">打开 B 版 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 使用协议 -->
+<details class="protocol">
+  <summary>
+    <span class="tag">06 使用协议 · 两档模式</span>
+    <span class="tag" aria-hidden="true">＋ / －</span>
+  </summary>
+  <div class="body">
+    <div class="mode"><b>探索态</b>：只给风格方向词 + 3-4 个关键维度，其余放开——用于创意发散、选方向。</div>
+    <div class="mode"><b>收敛态</b>：8 维全锁死（token 级值域 + 白名单 + 禁区全注入）——用于定稿生成、交付。</div>
+    <ul>
+      <li>装载：将 SKILL.md 挂载到 coding agent（system prompt / CLAUDE.md）</li>
+      <li>自检：产物必须附 8 维逐项自检清单（对齐 token、禁 Inter、动效参数、reduced-motion…）</li>
+      <li>闸门：L1 几何量化 → L2 参考对齐 → L3 人工评审，审美裁决权永远在人</li>
+    </ul>
+  </div>
+</details>
+
+<footer class="page-foot">
+  <span>FORM·AESTHETIC</span>
+  <span><a href="https://github.com/TEXXXXTURE/frontend-aesthetic-skill">GITHUB</a> · SKILL v0.2 · 2026</span>
+</footer>
+
+<script>
+  const p = document.querySelector('details.protocol');
+  const s = p.querySelector('summary');
+  p.addEventListener('toggle', () => s.setAttribute('aria-expanded', String(p.open)));
+</script>
+
+</body>
+</html>

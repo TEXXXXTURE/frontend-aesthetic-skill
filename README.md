@@ -8,6 +8,15 @@
 |---|---|---|
 | v0.2 | SKILL.md 协议（可装载到任何 coding agent） | 零依赖 · 零构建 · 单文件 HTML |
 
+## 点进来先看这个：Design 展示页
+
+**这个页面本身由卡 1（Swiss 印刷风）的 8 维指标生成——是 Skill 的自证样本。**
+
+- 在线浏览：[GitHub Pages 首页](https://texxxxture.github.io/frontend-aesthetic-skill/)（`index.html`）
+- 仓库内源码：[design.html](design.html)
+
+<img src="assets/design-preview.png" alt="Design 展示页首屏" width="820">
+
 ## A/B 验证：指标真的有效
 
 三组实验均由普通模型（非旗舰级）执行，题材各不相同，只改一个变量：是否注入 8 维指标。
@@ -87,18 +96,15 @@
 | ab2 · 极光电台 | [ab2-radio-constraints.html](examples/ab2-radio-constraints.html) | [ab2-radio-no-constraints.html](examples/ab2-radio-no-constraints.html) |
 | ab3 · 山间石屋 | [ab3-house-constraints.html](examples/ab3-house-constraints.html) | [ab3-house-no-constraints.html](examples/ab3-house-no-constraints.html) |
 
-## Design 展示页
-
-[design.html](design.html) —— 本页本身由卡 1（Swiss 印刷风）的 8 维指标生成，是 skill 的自证样本。建议部署 GitHub Pages 后直接访问。
-
 ## 目录结构
 
 ```
 frontend-aesthetic-skill/
 ├── README.md            # 本文件
+├── index.html           # 设计展示页（Pages 首页，卡 1 生成的自证样本）
 ├── SKILL.md             # Skill 本体（8 维网络 + 预设卡 + 自检清单 + 两档模式）
-├── design.html          # 设计语言展示页（卡 1 生成，自证样本）
-├── assets/              # README 对比图（scripts/make-compare.py 可复现）
+├── design.html          # 设计展示页源码（与 index.html 同内容）
+├── assets/              # README 对比图 + 展示页预览（scripts/make-compare.py 可复现）
 ├── examples/            # A/B 验证产物（6 个单文件 HTML）
 └── scripts/             # 对比图合成脚本
 ```
