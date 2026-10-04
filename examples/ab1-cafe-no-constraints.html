@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaffeeform · 瑞士风格咖啡馆</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    color: #2d2d2d;
+    background: #faf8f5;
+    line-height: 1.6;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header {
+    background: #ffffff;
+    border-bottom: 1px solid #e8e4de;
+    padding: 18px 0;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .logo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; font-weight: 700; letter-spacing: 1px;
+    color: #1a1a1a;
+  }
+  nav a {
+    margin-left: 28px; text-decoration: none; color: #555;
+    font-size: 14px; font-weight: 500;
+  }
+  nav a:hover { color: #c98a4b; }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 100px 0 90px;
+    background: linear-gradient(180deg, #faf8f5 0%, #f3ede4 100%);
+  }
+  .hero .tagline {
+    font-size: 13px; letter-spacing: 4px; text-transform: uppercase;
+    color: #b08a5e; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 64px; font-weight: 600; line-height: 1.1;
+    color: #1a1a1a; margin-bottom: 24px;
+  }
+  .hero p {
+    max-width: 560px; margin: 0 auto 36px; color: #6b6259;
+    font-size: 17px;
+  }
+  .btn {
+    display: inline-block; padding: 14px 34px;
+    background: #1a1a1a; color: #fff;
+    border-radius: 30px; text-decoration: none;
+    font-size: 14px; letter-spacing: 1px;
+    transition: background .3s;
+  }
+  .btn:hover { background: #c98a4b; }
+
+  /* Features */
+  .features {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 28px; padding: 80px 0;
+  }
+  .card {
+    background: #fff; border-radius: 16px; padding: 36px 28px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    text-align: center;
+  }
+  .card .icon { font-size: 40px; margin-bottom: 16px; }
+  .card h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; margin-bottom: 10px; }
+  .card p { font-size: 14px; color: #777; }
+
+  /* Menu section */
+  .menu {
+    background: #1f1f1f; color: #f5f2ec; padding: 80px 0;
+  }
+  .menu h2 {
+    text-align: center; font-family: 'Playfair Display', Georgia, serif;
+    font-size: 40px; margin-bottom: 48px;
+  }
+  .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .menu-item {
+    background: rgba(255,255,255,.05);
+    border-radius: 12px; padding: 24px;
+  }
+  .menu-item h4 { font-size: 16px; margin-bottom: 6px; }
+  .menu-item .price { color: #c98a4b; font-weight: 600; margin-top: 8px; }
+  .menu-item p { font-size: 13px; color: #aaa; }
+
+  /* About */
+  .about {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    padding: 90px 0; align-items: center;
+  }
+  .about img {
+    width: 100%; border-radius: 16px; display: block;
+  }
+  .about h2 {
+    font-family: 'Playfair Display', Georgia, serif; font-size: 34px; margin-bottom: 18px;
+  }
+  .about p { color: #666; margin-bottom: 14px; }
+
+  /* Footer */
+  footer {
+    background: #141414; color: #999; text-align: center;
+    padding: 40px 0; font-size: 13px;
+  }
+  footer .social { margin-top: 14px; }
+  footer .social a { color: #777; margin: 0 12px; text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .features, .menu-grid, .about { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 40px; }
+    nav a { margin-left: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <div class="logo">Kaffeeform</div>
+    <nav>
+      <a href="#menu">菜单</a>
+      <a href="#about">关于</a>
+      <a href="#visit">到店</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="tagline">Zürich · Handmade Coffee Since 2012</div>
+    <h1>一杯咖啡，<br>一段瑞士时光</h1>
+    <p>我们烘焙、冲泡、分享。在 Kaffeeform，每一杯都遵循瑞士式的精确与克制。</p>
+    <a href="#menu" class="btn">查看菜单</a>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container" style="display:contents">
+    <div class="card">
+      <div class="icon">☕</div>
+      <h3>精选手冲</h3>
+      <p>来自埃塞俄比亚与哥伦比亚的单一庄园豆，每日新鲜烘焙。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🥐</div>
+      <h3>瑞士糕点</h3>
+      <p>现烤牛角包与瑞士传统糕点，搭配本店特调。</p>
+    </div>
+    <div class="card">
+      <div class="icon">📍</div>
+      <h3>老城一隅</h3>
+      <p>位于老城区的安静角落，适合阅读与独处。</p>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="container">
+    <h2>今日菜单</h2>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <h4>埃塞俄比亚·耶加雪菲</h4>
+        <p>柑橘 · 茉莉 · 蜂蜜</p>
+        <div class="price">¥38</div>
+      </div>
+      <div class="menu-item">
+        <h4>哥伦比亚·慧兰</h4>
+        <p>焦糖 · 红苹果 · 可可</p>
+        <div class="price">¥35</div>
+      </div>
+      <div class="menu-item">
+        <h4>瑞士传统维也纳咖啡</h4>
+        <p>浓缩 · 鲜奶油 · 巧克力屑</p>
+        <div class="price">¥42</div>
+      </div>
+      <div class="menu-item">
+        <h4>牛角包</h4>
+        <p>每日现烤，配有机黄油</p>
+        <div class="price">¥18</div>
+      </div>
+      <div class="menu-item">
+        <h4>瑞士奶酪蛋糕</h4>
+        <p>传统配方，轻盈不腻</p>
+        <div class="price">¥32</div>
+      </div>
+      <div class="menu-item">
+        <h4>冷萃气泡咖啡</h4>
+        <p>冷萃12小时 · 气泡水 · 橙皮</p>
+        <div class="price">¥36</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="container" style="display:contents">
+    <div style="background:#e9e2d6;border-radius:16px;min-height:320px;display:flex;align-items:center;justify-content:center;color:#b0a58f;font-size:14px;letter-spacing:2px">咖啡馆空间 · 照片占位</div>
+    <div>
+      <h2>关于 Kaffeeform</h2>
+      <p>Kaffeeform 诞生于苏黎世老城，一间只有八张桌子的小店。我们相信：好的咖啡不需要喧哗。</p>
+      <p>从豆子到杯子的每一步，我们都用瑞士式的精确来完成——称重到 0.1 克，水温控制在 ±1°C。</p>
+    </div>
+  </div>
+</section>
+
+<footer id="visit">
+  <div class="container">
+    <p>© 2026 Kaffeeform · 苏黎世老城 Niederdorfstrasse 12</p>
+    <p>周一至周日 08:00 – 20:00</p>
+    <div class="social">
+      <a href="#">Instagram</a>
+      <a href="#">小红书</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

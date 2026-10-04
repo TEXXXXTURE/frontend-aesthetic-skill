@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aurora Radio — Listening to the Sky</title>
+<style>
+  :root {
+    --night: #071315;          /* 近黑底（刻意避开紫色） */
+    --mint: #39f9ab;           /* 薄荷绿主强调 */
+    --mint-soft: #acffd5;      /* 薄荷绿亮 */
+    --blue: #57b8ef;           /* 极光蓝 */
+    --glass: #d0f7e708;        /* 玻璃面板透明 */
+    --text: #e8f4ef;
+    --dim: #8fa8a0;
+    --rule: 1px solid rgba(185, 224, 210, .18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--night);
+    color: var(--text);
+    font-family: Arial, 'Helvetica Neue', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+  /* ⑤ 背景质感 · 四层：径向渐变 + 模糊丝带 + 星点阵 + 玻璃 */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: -3;
+    background:
+      radial-gradient(120% 80% at 75% 12%, rgba(87,184,239,.16), transparent 60%),
+      radial-gradient(90% 70% at 20% 85%, rgba(57,249,171,.10), transparent 55%),
+      var(--night);
+  }
+  .aurora-ribbon {
+    position: fixed; inset: -20% -10%; z-index: -2;
+    background:
+      radial-gradient(40% 22% at 68% 24%, rgba(57,249,171,.28), transparent 70%),
+      radial-gradient(34% 20% at 42% 34%, rgba(87,184,239,.24), transparent 70%),
+      radial-gradient(28% 16% at 80% 46%, rgba(172,255,213,.16), transparent 70%);
+    filter: blur(65px);           /* 样本 001：模糊渐变丝带 */
+    animation: drift 14s ease-in-out infinite alternate;   /* 样本 001：14s 漂移 */
+  }
+  @keyframes drift {
+    0% { transform: translate3d(-3%, -1%, 0) rotate(-1deg); }
+    100% { transform: translate3d(3%, 2%, 0) rotate(1.4deg); }
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: -1;
+    background-image:
+      radial-gradient(1.5px 1.5px at 12% 18%, rgba(240,255,250,.7) 50%, transparent 51%),
+      radial-gradient(1px 1px at 34% 62%, rgba(240,255,250,.5) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 56% 28%, rgba(240,255,250,.6) 50%, transparent 51%),
+      radial-gradient(1px 1px at 72% 74%, rgba(240,255,250,.45) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 88% 40%, rgba(240,255,250,.6) 50%, transparent 51%);
+    background-size: 720px 540px;  /* 样本 001：星点阵 mask-image 等效 */
+    opacity: .5;
+  }
+  /* ① 字体：Georgia 巨型衬线 display + Arial 标签大字距 */
+  h1, .display {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: normal;
+  }
+  .tag, .meta, .label, .dim, footer {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;          /* 样本 001：标签 3-4px 大字距 */
+    text-transform: uppercase;
+  }
+  /* ④ 动效：极光丝带 14s + 暂停/恢复 + reduced-motion */
+  .toggle {
+    position: fixed; right: 26px; top: 26px; z-index: 10;
+    background: var(--glass);
+    backdrop-filter: blur(20px);  /* 玻璃拟态 */
+    border: var(--rule);
+    color: var(--text);
+    padding: 10px 18px;
+    font: 11px Arial; letter-spacing: 2px;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .toggle:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+
+  header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 34px 5vw 0;
+  }
+  header .brand { font-family: Arial; font-weight: 900; font-size: 15px; letter-spacing: 4px; color: var(--mint); }
+  header .meta { color: var(--dim); }
+
+  /* ③ 间距网格：max-width 1500 中心 + 大留白 */
+  .hero {
+    max-width: 1500px; margin: 0 auto;
+    padding: 14vh 5vw 8vh;
+  }
+  .hero .eyebrow { color: var(--mint); margin-bottom: 3.5vh; }
+  .hero h1 {
+    font-size: clamp(64px, 9vw, 145px);   /* 样本 001：巨型衬线 */
+    line-height: .96;
+    letter-spacing: -5px;                 /* 样本 001：-5px 字距 */
+    max-width: 14ch;
+    margin-bottom: 6vh;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--mint);                   /* 样本 001：em 强调色 */
+  }
+  .hero .intro {
+    max-width: 420px;
+    font-size: 14px; line-height: 2;
+    color: var(--dim);
+    border-left: 2px solid var(--mint);
+    padding-left: 22px;
+  }
+
+  /* ⑦ 结构：header→巨型标题→intro→双栏（玻璃信息卡+极光活动柱状图+slider）→footer */
+  .duo {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;     /* 样本 001：双栏 1.5fr:1fr */
+    gap: 0;
+    max-width: 1500px; margin: 0 auto;
+    padding: 0 5vw 12vh;
+  }
+  .glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);          /* 样本 001：玻璃拟态 */
+    border: var(--rule);
+    border-radius: 18px;                  /* 样本 001：玻璃卡 18px 圆角 */
+    padding: 40px;
+  }
+  .readout { display: flex; flex-direction: column; gap: 22px; }
+  .readout .row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: var(--rule);
+  }
+  .readout .row .k { color: var(--dim); }
+  .readout .row .v { font-family: Georgia, serif; font-size: 26px; color: var(--mint-soft); }
+  .readout .row .v small { font-family: Arial; font-size: 11px; letter-spacing: 2px; color: var(--dim); }
+
+  .activity {
+    display: flex; flex-direction: column;
+    padding: 0 2vw;
+  }
+  .activity .chart {
+    display: flex; align-items: flex-end; gap: 8px;
+    height: 190px; margin: 20px 0 26px;
+  }
+  .activity .chart i {
+    flex: 1;
+    background: linear-gradient(180deg, var(--mint), rgba(87,184,239,.55));
+    border-radius: 2px 2px 0 0;
+    height: 100%;
+    transform-origin: bottom;
+  }
+  /* ④ 柱状图生长动画 + reduced-motion 降级 */
+  .activity .chart i { animation: grow 1.2s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes grow { from { transform: scaleY(0); } }
+  .activity .chart i:nth-child(1) { height: 34%; animation-delay: .05s; }
+  .activity .chart i:nth-child(2) { height: 58%; animation-delay: .12s; }
+  .activity .chart i:nth-child(3) { height: 46%; animation-delay: .19s; }
+  .activity .chart i:nth-child(4) { height: 82%; animation-delay: .26s; }
+  .activity .chart i:nth-child(5) { height: 100%; animation-delay: .33s; }
+  .activity .chart i:nth-child(6) { height: 72%; animation-delay: .40s; }
+  .activity .chart i:nth-child(7) { height: 52%; animation-delay: .47s; }
+  .activity .chart i:nth-child(8) { height: 30%; animation-delay: .54s; }
+  .chart-label {
+    display: flex; justify-content: space-between;
+    font-size: 10px; letter-spacing: 2px; color: var(--dim);
+  }
+  .slider-block { margin-top: auto; }
+  .slider-block .label { color: var(--mint); margin-bottom: 14px; }
+  input[type="range"] {
+    width: 100%; accent-color: var(--mint);
+    cursor: pointer;
+  }
+  .slider-block .scale {
+    display: flex; justify-content: space-between; margin-top: 8px;
+    font-size: 10px; letter-spacing: 2px; color: var(--dim);
+  }
+  .slider-block .note { margin-top: 16px; font-size: 11px; letter-spacing: 1px; color: var(--dim); }
+
+  footer {
+    display: flex; justify-content: space-between;
+    padding: 26px 5vw 34px;
+    border-top: var(--rule);
+    color: var(--dim);
+  }
+
+  @media (max-width: 860px) {
+    .duo { grid-template-columns: 1fr; gap: 40px; }
+    .hero h1 { font-size: clamp(52px, 12vw, 90px); }
+    .activity { padding: 0; }
+  }
+  /* 样本 001：reduced-motion 全尊重 */
+  @media (prefers-reduced-motion: reduce) {
+    .aurora-ribbon { animation: none; }
+    .activity .chart i { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<button class="toggle" id="motion" aria-pressed="false">❚❚ 暂停极光</button>
+
+<header>
+  <div class="brand">AURORA·RADIO</div>
+  <div class="meta">FREQ 87.7 — ARCTIC CIRCLE · EST. 2016</div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">LISTENING TO THE SKY</div>
+  <h1>Signal from <em>the Aurora</em></h1>
+  <p class="intro">一架架设在北极圈上空的概念电台。二十四小时接收电离层与磁层之间的无声合唱，将天空的低语转译成可听见的频率。</p>
+</section>
+
+<main class="duo">
+  <!-- 玻璃信息卡 -->
+  <section class="glass-card readout" aria-label="电台状态">
+    <div class="row"><span class="k">CURRENT SIGNAL</span><span class="v">87.7 <small>MHZ</small></span></div>
+    <div class="row"><span class="k">COORDINATES</span><span class="v">69.6° N</span></div>
+    <div class="row"><span class="k">KP INDEX</span><span class="v">5.2 <small>ACTIVE</small></span></div>
+    <div class="row"><span class="k">ALTITUDE</span><span class="v">120 <small>KM</small></span></div>
+  </section>
+
+  <!-- 极光活动 + slider -->
+  <section class="activity" aria-label="极光活动与波段选择">
+    <div class="label">AURORA ACTIVITY · 24H</div>
+    <div class="chart" role="img" aria-label="过去 24 小时极光活动柱状图，今晚峰值最高">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="chart-label"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
+    <div class="slider-block">
+      <label class="label" for="band">BAND SELECT · 波段选择</label>
+      <input type="range" id="band" min="0" max="100" value="62" aria-valuetext="62 MHz">
+      <div class="scale"><span>VLF 3kHz</span><span>HF 30MHz</span></div>
+      <p class="note">* 数据为示意（illustrative），非真实遥测。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>TRANSMITTING FROM 69.6°N</span>
+  <span>© 2026 AURORA RADIO · CONCEPT</span>
+</footer>
+
+<script>
+  /* ④ 动效：暂停/恢复极光漂移（样本 001 做法） */
+  const btn = document.getElementById('motion');
+  const ribbon = document.querySelector('.aurora-ribbon');
+  let running = true;
+  btn.addEventListener('click', () => {
+    running = !running;
+    ribbon.style.animationPlayState = running ? 'running' : 'paused';
+    btn.textContent = running ? '❚❚ 暂停极光' : '▶ 恢复极光';
+    btn.setAttribute('aria-pressed', String(!running));
+  });
+</script>
+
+</body>
+</html>

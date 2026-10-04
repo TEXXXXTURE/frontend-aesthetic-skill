@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FORM — 一杯咖啡的形式</title>
+<style>
+  :root {
+    --paper: #f2eee5;          /* 背景：新闻纸 */
+    --ink: #25231f;            /* 墨 */
+    --accent: #d63823;         /* 强调朱红 */
+    --cream: #efc6a4;          /* 奶油 */
+    --brown: #2e262b;          /* 深棕 */
+    --dark-red: #b33020;       /* 暗红 */
+    --red: #bc3729;            /* 红 */
+    --grey: #ada79c;           /* 灰 */
+    --rule: 2px solid var(--ink);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Arial, 'Helvetica Neue', sans-serif;
+  }
+
+  /* ——— ① 字体系统：sans masthead 900 + serif 正文；标签层 2px 字距 ——— */
+  .masthead {
+    font-family: Arial, sans-serif;
+    font-weight: 900;
+    font-size: clamp(13px, 1.6vw, 18px);
+    letter-spacing: -0.09em;   /* 样本 002：masthead 负字距 */
+  }
+  .tag, .label, .meta, .foot {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;       /* 样本 002：标签层统一 letter-spacing:2px */
+    text-transform: uppercase;
+  }
+  h1, h2, .serif, .letter, .price-num {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: normal;
+  }
+
+  /* ——— ⑧ 可访问 & 交付 ——— */
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 3px;
+  }
+
+  /* ——— ② 色板角色：五角色 + 主导/强调 ——— */
+  header.page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 18px 4vw;
+    border-bottom: var(--rule);
+  }
+  header.page-head .meta { color: var(--ink); }
+
+  /* ——— ③ 间距网格：巨型刊名 + 规则线 + 三栏不对称 ——— */
+  .mast {
+    padding: 6vh 4vw 3vh;
+    border-bottom: var(--rule);
+  }
+  .mast h1 {
+    font-size: clamp(90px, 22vw, 340px);   /* 样本 002：巨型报头 */
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+  .mast h1 .o { color: var(--accent); }     /* O 字标红 */
+  .mast .strap {
+    display: flex; justify-content: space-between;
+    margin-top: 1.5vh;
+    border-top: var(--rule);
+    padding-top: 8px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1.1fr 1.7fr 0.8fr;   /* 样本 002：三栏不对称 */
+    border-bottom: var(--rule);
+  }
+  .layout > section { padding: 5vh 2.2vw; }
+  .layout > section + section { border-left: var(--rule); }
+
+  .sec-head {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 3vh;
+  }
+  .sec-head .label {
+    background: var(--ink); color: var(--paper);
+    padding: 4px 10px;
+  }
+  .sec-head .no { font-size: 10px; letter-spacing: 2px; color: var(--grey); }
+
+  /* ——— ⑦ 结构：intro / art / sidebar ——— */
+  .intro p {
+    font-size: 15px; line-height: 1.9;
+    margin-bottom: 3.2vh;
+  }
+  .intro p strong { font-family: Georgia, serif; font-weight: normal; font-size: 18px; }
+  .intro .rule-note {
+    border-top: var(--rule); border-bottom: var(--rule);
+    padding: 12px 0; font-size: 13px;
+    color: var(--brown);
+  }
+
+  /* art 栏：CSS 几何构成（无图片，样本 002 做法） */
+  .art {
+    position: relative;
+    display: flex; flex-direction: column; gap: 4vh;
+  }
+  .composition {
+    position: relative;
+    min-height: 340px;
+  }
+  .composition [data-shape] { position: absolute; }
+  .cup-ring {
+    top: 6%; left: 30%;
+    width: 46%; height: 0; padding-bottom: 46%;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+  }
+  .cup-body {
+    top: 34%; left: 38%;
+    width: 30%; height: 34%;
+    background: var(--cream);
+    border: 3px solid var(--ink);
+    border-radius: 0 0 18px 18px;
+  }
+  .cup-handle {
+    top: 40%; left: 70%;
+    width: 14%; height: 22%;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+  }
+  .saucer {
+    top: 70%; left: 26%;
+    width: 52%; height: 0; padding-bottom: 10%;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    background: var(--paper);
+  }
+  .bean-a {
+    top: 12%; left: 8%;
+    width: 44px; height: 30px;
+    background: var(--dark-red);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    transform: rotate(-18deg);
+  }
+  .bean-b {
+    top: 16%; right: 6%;
+    width: 34px; height: 22px;
+    background: var(--red);
+    border-radius: 50%;
+    transform: rotate(24deg);
+  }
+  .block-shadow {
+    top: 74%; left: 16%;
+    width: 60%; height: 14px;
+    background: var(--ink);
+    opacity: .14;
+    transform: skewX(-32deg);
+  }
+  /* ④ 动效：雕塑 hover 变换 0.8s（样本 002） */
+  .composition [data-shape] {
+    transition: transform .8s cubic-bezier(.2,.7,.2,1), border-radius .8s;
+  }
+  .composition:hover .cup-body {
+    transform: rotate(-3deg) skewY(2deg);
+    border-radius: 8px 8px 22px 22px;
+  }
+  .composition:hover .cup-ring { transform: rotate(6deg); border-radius: 42% 58% 46% 54%; }
+  .composition:hover .bean-a { transform: rotate(10deg) scale(1.12); }
+  .menu-list { list-style: none; }
+  .menu-list li {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--ink);
+  }
+  .menu-list .name { font-size: 14px; }
+  .menu-list .dots { flex: 1; border-bottom: 1px dotted var(--grey); margin: 0 10px; transform: translateY(-4px); }
+  .menu-list .price-num { font-size: 17px; }
+
+  .sidebar { display: flex; flex-direction: column; gap: 4.5vh; }
+  .sidebar .info-row {
+    display: flex; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--ink);
+    font-size: 12px;
+  }
+  .sidebar .info-row .k { letter-spacing: 2px; font-size: 10px; color: var(--brown); }
+  .sidebar .badge {
+    border: 2px solid var(--ink);
+    padding: 14px 16px; font-size: 13px; line-height: 1.7;
+  }
+  .sidebar .badge strong { font-family: Georgia, serif; font-weight: normal; font-size: 22px; display: block; margin-bottom: 6px; }
+
+  /* 折叠编辑信（⑦ 结构项） */
+  details.letter {
+    border-top: var(--rule); border-bottom: var(--rule);
+    margin: 0 4vw;
+  }
+  details.letter summary {
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 0;
+    cursor: pointer;
+  }
+  details.letter summary::-webkit-details-marker { display: none; }
+  details.letter .letter-body {
+    font-family: Georgia, serif;
+    font-size: 15px; line-height: 2;
+    max-width: 640px;
+    padding: 0 0 4vh;
+  }
+  details.letter .letter-body .sign {
+    margin-top: 2vh; font-size: 13px; letter-spacing: 2px;
+  }
+
+  footer.page-foot {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 18px 4vw;
+    font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    .layout > section + section { border-left: none; border-top: var(--rule); }
+    .mast h1 { font-size: clamp(90px, 30vw, 220px); }
+    .composition { min-height: 300px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .composition [data-shape] { transition: none; }
+    .composition:hover * { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ⑧ 语义结构：header → mast → 三栏 → 编辑信 → footer；aria 状态齐全 -->
+<header class="page-head">
+  <div class="masthead">FORM·KAFFEE</div>
+  <div class="meta">ZÜRICH — EST. 2012 · 苏黎世老城</div>
+</header>
+
+<section class="mast" aria-label="刊名">
+  <h1>F<span class="o">O</span>RM</h1>
+  <div class="strap">
+    <span class="tag">一杯咖啡，一种形式</span>
+    <span class="tag">KAFFEE ALS FORM · 印刷体中的咖啡馆</span>
+  </div>
+</section>
+
+<main class="layout">
+  <!-- 左栏：intro -->
+  <section class="intro">
+    <div class="sec-head">
+      <span class="label">序言</span>
+      <span class="no">NR.01 / 2026</span>
+    </div>
+    <p><strong>我们相信，</strong>一杯好的咖啡与一页好的印刷品遵循同一种纪律：克制的用色、精确的网格、以及不为讨好任何人而存在的留白。</p>
+    <p>FORM 是开在苏黎世老城的一家小馆。八张桌子，一台意式机，每日烘焙的豆单用手写体贴在最里面的墙上——那是我们唯一允许潦草的地方。</p>
+    <div class="rule-note">本月主题：<span style="color:var(--accent)">瑞士式精确</span> —— 从豆子的克数到版心的毫米。</div>
+  </section>
+
+  <!-- 中栏：art（CSS 几何构成） -->
+  <section class="art" aria-label="今日豆单">
+    <div class="sec-head">
+      <span class="label">今日豆单</span>
+      <span class="no">ROAST 042</span>
+    </div>
+    <div class="composition" role="img" aria-label="由几何形状构成的抽象咖啡杯：圆环杯口、奶油色杯身、手柄、杯碟、两颗咖啡豆与阴影">
+      <div class="bean-a" data-shape></div>
+      <div class="bean-b" data-shape></div>
+      <div class="cup-ring" data-shape></div>
+      <div class="cup-body" data-shape></div>
+      <div class="cup-handle" data-shape></div>
+      <div class="saucer" data-shape></div>
+      <div class="block-shadow" data-shape></div>
+    </div>
+    <ul class="menu-list">
+      <li><span class="name">埃塞俄比亚 · 耶加雪菲</span><span class="dots"></span><span class="price-num">¥38</span></li>
+      <li><span class="name">哥伦比亚 · 慧兰</span><span class="dots"></span><span class="price-num">¥35</span></li>
+      <li><span class="name">FORM 特调维也纳</span><span class="dots"></span><span class="price-num">¥42</span></li>
+      <li><span class="name">冷萃气泡 · 橙皮</span><span class="dots"></span><span class="price-num">¥36</span></li>
+    </ul>
+  </section>
+
+  <!-- 右栏：sidebar -->
+  <section class="sidebar">
+    <div class="sec-head">
+      <span class="label">到店</span>
+    </div>
+    <div class="info-row"><span class="k">ADDRESS</span><span>Niederdorfstr. 12</span></div>
+    <div class="info-row"><span class="k">HOURS</span><span>08:00 — 20:00</span></div>
+    <div class="info-row"><span class="k">ROAST DAY</span><span>周二 / 周五</span></div>
+    <div class="badge">
+      <strong>“克制即款待”</strong>
+      我们没有 Wi-Fi 密码的告示牌，<br>但有全城最好的安静。
+    </div>
+  </section>
+</main>
+
+<!-- 折叠编辑信 -->
+<details class="letter">
+  <summary aria-expanded="false">
+    <span class="tag">编辑信 · 主理人手记</span>
+    <span class="tag" aria-hidden="true">＋ / －</span>
+  </summary>
+  <div class="letter-body">
+    <p>亲爱的客人：</p>
+    <p>本期我们把店开进了印刷机。瑞士平面设计教会我一件关于咖啡的事：真正的好东西不需要用力过猛——豆子、水、时间，精确到克与秒，剩下的交给沉默。</p>
+    <p>欢迎来坐。若你愿意，可以和吧台聊聊今天豆单上那张手写标签的来历。</p>
+    <p class="sign">— H. MEIER, 主理人 · 2026 年 10 月</p>
+  </div>
+</details>
+
+<footer class="page-foot">
+  <span>FORM·KAFFEE</span>
+  <span>SWISS PRINT &amp; COFFEE</span>
+  <span>© 2026</span>
+</footer>
+
+<script>
+  /* ⑧ 可访问：折叠编辑信显式管理 aria-expanded（卡 1 / 样本 002 做法） */
+  const letter = document.querySelector('details.letter');
+  const sum = letter.querySelector('summary');
+  letter.addEventListener('toggle', () => {
+    sum.setAttribute('aria-expanded', String(letter.open));
+  });
+</script>
+
+</body>
+</html>
