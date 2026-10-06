@@ -2,11 +2,11 @@
 type: skill
 id: skill.frontend-aesthetic
 name: frontend-aesthetic-skill
-version: 0.2
+version: 0.4
 status: draft
-updated: 2026-10-05
+updated: 2026-10-07
 owner: A
-origin: 前端审美 Skill 规划方案 v0.1（2026-10-04）；v0.2 = A/B 三连验证反哺禁区扩充（2026-10-05）
+origin: 前端审美 Skill 规划方案 v0.1（2026-10-04）；v0.2 = A/B 三连验证反哺禁区扩充（2026-10-05）；v0.3 = 新增卡 4 Munder 像素办公室风（2026-10-07，样本 005 源码解剖）；v0.4 = 色板维度升级为「用色逻辑」（四层模型 + 提取规范 + 卡 4 重写样板，2026-10-07）
 ---
 
 # 前端审美 Skill v0.1
@@ -39,7 +39,7 @@ origin: 前端审美 Skill 规划方案 v0.1（2026-10-04）；v0.2 = A/B 三连
 ## 8 维约束网络
 
 1. **字体系统**：白名单（编辑风 Playfair/Fraunces · 代码风 JetBrains/Fira · 独特风 Bricolage，按风格卡锁定）；禁 Inter/Roboto/Arial 作 display；角色分配 display/body/mono 三分；配对高对比原则（衬线 display + 无衬线 body/元数据）
-2. **色板角色表**：背景/表面/边框/正文/强调 五角色；主导色 + 锐利强调色（禁平均分配）；禁紫渐变白底；CSS variables 强制
+2. **用色逻辑**（v0.4 起取代"色板角色表"）：提取目标从"色值快照"升级为"用色逻辑"——①角色表（背景/表面/边框/正文/强调 五角色 + 状态语义色）②关系规则（饱和度带/明度带/对比度约束，可量化）③示例锚点色值（**仅作参考样例，非硬约束**）；禁平均分配；禁紫渐变白底；CSS variables 强制。提取方法见「用色逻辑提取规范」
 3. **间距与网格**：8pt/4pt 网格遵守；网格列比显式（禁 1fr 平均分栏）；字距节奏统一（标签层大字距 / 巨型标题负字距）；clamp 字号梯度 3x+
 4. **动效参数**：缓动区间显式（0.8-1.4s）；聚焦高影响时刻（stagger reveal/scroll scrub/功能切换）；禁跳动/闪烁/散乱 micro；尊重 reduced-motion
 5. **背景质感**：多层渐变/几何图案/情境效果；禁纯色平铺；CSS 绘制零外部资产
@@ -66,7 +66,57 @@ origin: 前端审美 Skill 规划方案 v0.1（2026-10-04）；v0.2 = A/B 三连
 
 ---
 
+## 用色逻辑提取规范（v0.4 新增）
+
+> 提取颜色时，目标不是"这页用了哪些色值"，而是"**这个设计师的用色脑子里在想什么**"——协调感来自用色逻辑，不来自具体色值。色值可换，逻辑不变，页面依然协调；反过来只抄色值换题材就废。
+
+### 为什么必须从源码提取
+
+用色逻辑写在源码里，视觉模型（看截图）只能看到"有什么颜色"，看不到"为什么是这些颜色"：
+
+| 信息层 | 视觉模型 | 源码提取 |
+|---|---|---|
+| 用了什么色值 | ✅ | ✅ |
+| 颜色在系统里的角色（变量名 `--cth-coral`、`--cth-status-thinking`） | ❌ | ✅ |
+| 颜色间的关系规则（注释"强调色落在 Linear/Radix 的 calm band"） | ❌ | ✅ |
+| 对比度约束（注释"ink-300 现在是 3.12-3.59:1"） | ❌ | ✅ |
+| 使用频次/用途（ink-300 用 187 次、93 次做边框） | ❌ | ✅ |
+
+### 用色逻辑四层模型
+
+| 层 | 内容 | 可迁移性 |
+|---|---|---|
+| L0 色值 | `#D96A62` | 不可迁移，会过时 |
+| L1 角色表 | coral=强调/危险、status-thinking=思考中 | 可迁移（换色值保留角色） |
+| L2 关系规则 | 强调色低饱和带、文字对比度 ≥4.5:1、暗色地面亮度 0.009-0.020 | **可迁移（协调感的来源，核心）** |
+| L3 生成约束 | 双主题切换、禁用态专用色、状态=语义色 | 可迁移（系统行为） |
+
+提取产物 = L1 角色表 + L2 关系规则 + L3 生成约束；L0 只作为「示例锚点色值」记录，标注"非硬约束"。
+
+### 分辨物体色 vs 背景色（三道线索）
+
+1. **变量命名编码角色**：`--cth-cream-50`（surface 层）、`--cth-ink-900`（文字层）→ 背景/表面；画中物体色往往是内联值或独立命名
+2. **使用位置**：`background: var(--cth-cream-100)`（面板表面）vs 具体元素填充
+3. **注释**：源码常直接说"这是地面""这是天空渐变"
+
+**终极判据（可替换性测试）**：改掉这个色值——气质变但页面成立 → 风格色（进逻辑）；改掉就失真（沙变蓝）→ 物体色（记录物名，不进逻辑）。物体色由现实给定、不构成设计逻辑，**自然出局**。
+
+### 提取产物格式
+
+```
+② 用色逻辑
+├── 角色表：五角色 + 状态语义色（换色值保留角色）
+├── 关系规则：饱和度带 / 明度带 / 对比度约束（可量化）
+└── 示例锚点色值（非硬约束）：仅作参考样例
+```
+
+生成时注入"逻辑（约束）"，agent 据题材**推导**具体色值，不抄锚点。
+
+---
+
 ## 预置风格预设卡
+
+> **卡 1-3 状态：v0.4 色板维度已升级为「用色逻辑」，但卡 1-3 的 ② 行仍为旧格式「色值快照」，待按新规范回标**（拆分角色表 / 关系规则 / 示例锚点，剔除物体色）。卡 4 已按新规范重写，为现行样板。
 
 ### 卡 1 · Swiss 印刷风（样本 002 FORM — 独立设计杂志封面）
 
@@ -107,12 +157,27 @@ origin: 前端审美 Skill 规划方案 v0.1（2026-10-04）；v0.2 = A/B 三连
 | ⑦ 结构 | header（logo+tagline）→编辑 intro（tiny 标签+巨型 h1+短文+按钮+specs）→大型 CSS 插画场景（太阳/土地/房屋/坐标注释）→footer |
 | ⑧ 可访问 | role=img + aria-label（场景）；aria-pressed（按钮状态）；reduced-motion；语义 header/main/section/footer；响应式断点 700px |
 
+### 卡 4 · 像素办公室风（样本 005 Munder Difflin — AI Agent 可视化工作台）
+
+> 样本：HarnessMD/munder-difflin（Electron + Pixi.js 的 AI Agent 可视化工作台，2026-10-07 前端源码解剖：tokens.css / themeRegistry.ts / PixelButton.tsx / fonts.css / 官方设计博客）。**桌面工具 UI 类**——区别于卡 1-3 的落地页类：场景层（Pixi 办公室）与 UI 层（面板/看板/终端）双轨并存。A/B 验证待补（本卡源自真实产品源码，非 GPT 样本）。**v0.4 已按「用色逻辑」新规范重写 ② 行，为现行样板**。
+
+| 维度 | 指标（token 级） |
+|---|---|
+| ① 字体 | 三角色显式分工：display="Press Start 2P"（仅品牌小标签，8-16px 大字距，不承载正文）+ ui="Inter"（400-700 可变，全部可读文本）+ mono="JetBrains Mono"（代码/终端）；CJK 走系统面 fallback 链（PingFang SC → Microsoft YaHei → Noto Sans CJK SC）；三字体自托管 woff2 内置，零外部字体依赖；display 档字号 16/12/8px，body 16/14/13px，行高整数倍（24/20/18/12） |
+| ② 用色逻辑 | **角色表**：背景/表面（cream-50→paper-200 纸面系）、边框（ink-300 发丝线）、正文（ink-900/700/500 墨系三档）、强调（六色系 coral/mint/sky/lemon/lilac/peach + 各带 -light 填充体）、状态（10 种语义色 idle/thinking/working/waiting/blocked/success/ghost/compacting/looping/typing，**颜色承载状态信息**）。**关系规则**：①强调色**低饱和带**——六色同处一个饱和度区间（注释原话：原版全饱和街机色"read as noise at UI density"，v0.3.4 校准到 Linear/Radix 的 calm band）②对比度=工程——双主题逐值 WCAG 验证：正文 ≥4.5:1、边框 ≥3.0:1、暗色地面非纯黑（亮度 0.009-0.020，注释："NOT BLACK, AND NOT WHITE"）、暗色文字暖白（0.71 而非 0.84）③结构来自表面对比非轮廓（发丝线边框，注释："structure now comes from surface contrast, not outlines"）④CSS variables 强制。**示例锚点（非硬约束）**：cream-50 #FFFDF5 / ink-900 #1A1320 / coral #D96A62 / sky #4F9FAF / 暗色地面 #17171B / 暗色文字 #DEDBD6 |
+| ③ 间距网格 | 8pt 体系（4/8/12/16/24/32/48/64）；控件高度 8pt 对齐（按钮 sm 24 / md 32 / lg 40，padding 8/12/16）；面板边框 = inset 0 0 0 1px 发丝线（结构来自表面对比，不来自轮廓）；**硬阴影无模糊** 3px 3px 0 rgba(26,19,32,.14)（明）/ 4px 4px 0 rgba(0,0,0,.45)（暗）——像素感深度，非弥散阴影；禁用态文字专用 ink-500（双主题兼容） |
+| ④ 动效 | 按钮按压 = translateY(1px) + inset 1px 边框（物理下沉，非变色）；信封飞行 = 二次贝塞尔弧（中点正弦抬升）+ ease in/out + 到达 burst ring；角色四态 walk/type/read/idle（真实事件驱动，非脚本循环）；相机平滑 lerp 跟随 + 地图边缘钳制；单共享 ticker 驱动全场景（帧预算可预测）；像素渲染 antialias:false + roundPixels:true + nearest 缩放（硬像素边，无模糊） |
+| ⑤ 背景质感 | 场景层 = Tiled 地图（.tmj）16×16 瓦片集（office-tileset / a5 floors-walls / interiors 三图集按 firstgid 排布）；办公室叙事道具：CEO 办公室（godOnly：植物+雪茄 18s）、咖啡经济闭环（托盘→咖啡机→水槽→托盘，maxCups 4）、饮水机/冰箱/货架/垃圾桶/浇花/窗风痕；交互道具锚点：日历→TRIGGERS、看板→TASKS、时钟→CLOSING TIME；零外部资产 |
+| ⑥ 风格词 | "pixel-art crisp, hard-shadow chrome, low-saturation product palette, a workplace you can watch"（The Office 喜剧致敬 × 开发工具里的游戏技术；位置/运动即状态，非装饰） |
+| ⑦ 结构 | 双层结构：场景层（tile map + character layer + envelopes 共用一个 world 容器 + 相机变换）+ UI 层（CommandCenter：Floor/Terminal/Activity/Tasks/Triggers/Handbook 分页）；每个位置/运动映射真实事件：PreToolUse→走向工具站、PostToolUse→回位、Stop→桌面 idle、消息→信封按 speech act 着色（ask 冷色 / agree 暖色 / refuse 红 / escalation 特殊色）；角色同底稿调色盘区分（skin/hair/shirt 配方） |
+| ⑧ 可访问 | 双主题 WCAG 逐值验证（正文 ≥4.5、边框 ≥3.0）；禁用态专用文字色（非变体继承）；reduced-motion 尊重；CJK/阿拉伯走系统面（中文 locale 专门适配，字体自托管解决大陆访问）；语义 HTML/aria/可见焦点；60fps 帧预算（单 ticker + 相机单节点变换 + nearest 缩放） |
+
 ---
 
 ## 产物自检清单（8 维逐项，生成时随产物输出）
 
 - [ ] ① 字体：display 未用 Inter/Roboto/Arial；白名单字体已用；衬线/无衬线配对成立；标签层字距拉开
-- [ ] ② 色板：CSS variables 已用；背景/表面/边框/正文/强调五角色齐全；主导色+强调色结构成立；无紫渐变白底
+- [ ] ② 用色逻辑：CSS variables 已用；背景/表面/边框/正文/强调五角色齐全；关系规则落地（饱和度带/明度带/对比度约束可量化）；色值由逻辑推导而非抄锚点；无紫渐变白底
 - [ ] ③ 间距网格：8pt/4pt 网格遵守；列比显式且不对称；字号梯度 ≥3x（clamp）
 - [ ] ④ 动效：每个动画有显式时长/缓动；区间 0.8-1.4s；无跳动/闪烁；reduced-motion 已降级
 - [ ] ⑤ 背景质感：至少两层质感（渐变/几何/情境）；非纯色平铺；零外部资产
@@ -143,4 +208,5 @@ origin: 前端审美 Skill 规划方案 v0.1（2026-10-04）；v0.2 = A/B 三连
 ## 附：样本来源
 
 - 样本 001/002/004：MiaAI-Lab/GPT-6-Astra-100-HTML-Files（https://github.com/MiaAI-Lab/GPT-6-Astra-100-HTML-Files）——GPT-6 Astra 生成的高审美单文件 HTML
+- 样本 005：HarnessMD/munder-difflin（https://github.com/HarnessMD/munder-difflin）——Electron + Pixi.js 的 AI Agent 可视化工作台；卡 4 由前端源码解剖提取（tokens.css / themeRegistry.ts / PixelButton.tsx / fonts.css / design 博客 / visualizing-ai-agents-pixijs + building-an-ai-office-floor），**桌面工具 UI 类首张卡，A/B 验证待补**
 - 8 维框架归纳依据：Claude cookbook《Prompting for frontend aesthetics》+ OpenAI GPT-6 Astra 发布页 + 三样本全码解剖
