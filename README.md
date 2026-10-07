@@ -1,8 +1,8 @@
 # frontend-aesthetic-skill
 
-**把 "万分之一审美" 翻译成可执行约束** —— 一套 8 维 token 级指标约束网络，让普通模型脱离训练均值分布、做出高审美前端。
+frontend-aesthetic-skill 是一份可挂载到 coding agent 的前端视觉约束协议（SKILL.md 单文件）：把高审美样本拆成字体/色板/网格/动效等 8 组 token 级约束，在生成页面时全覆盖注入，避免输出落入通用模板。
 
-> A/B 验证三连证明：同一题材，一句话方向词的输出落入训练均值；注入 8 维指标后，输出完全脱离模板 —— 差距是肉眼级的。
+
 
 
 
@@ -10,7 +10,7 @@
 | ---- | -------------------------------- | ---------------- |
 | v0.2 | SKILL.md 协议（可装载到任何 coding agent） | 零依赖・零构建・单文件 HTML |
 
-## 点进来先看这个：Design 展示页
+## Design 展示页
 
 **这个页面本身由卡 1（Swiss 印刷风）的 8 维指标生成 —— 是 Skill 的自证样本。**
 
@@ -18,13 +18,13 @@
 
 * 在线浏览：[GitHub Pages 首页](https://texxxxture.github.io/frontend-aesthetic-skill/)（`index.html`）
 
-* 仓库内源码：[design.html](design.html)
+* 仓库内源码：[index.html](index.html)
 
 
 
 ![Design 展示页首屏](assets/design-preview.png)
 
-## A/B 验证：指标真的有效
+## 三组 A/B 对照实验
 
 三组实验均由普通模型（非旗舰级）执行，题材各不相同，只改一个变量：是否注入 8 维指标。
 
@@ -133,12 +133,12 @@
 ```
 frontend-aesthetic-skill/
 ├── README.md            # 本文件
-├── index.html           # 设计展示页（Pages 首页，卡 1 生成的自证样本）
+├── index.html           # 设计展示页（Pages 首页）
 ├── SKILL.md             # Skill 本体（8 维网络 + 预设卡 + 自检清单 + 两档模式）
-├── design.html          # 设计展示页源码（与 index.html 同内容）
-├── assets/              # README 对比图 + 展示页预览（scripts/make-compare.py 可复现）
-├── examples/            # A/B 验证产物（6 个单文件 HTML）
-└── scripts/             # 对比图合成脚本
+├── assets/              # README 对比图与展示页预览（一次性产物）
+├── docs/                # A/B 对比记录
+├── examples/            # A/B 对照产物（6 个单文件 HTML）
+└── scripts/             # 对比图合成脚本（含本机路径，仅作者本机可跑）
 ```
 
 ## License
