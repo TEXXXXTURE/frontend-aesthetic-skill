@@ -135,10 +135,9 @@ frontend-aesthetic-skill/
 ├── README.md            # 本文件
 ├── index.html           # 设计展示页（Pages 首页）
 ├── SKILL.md             # Skill 本体（8 维网络 + 预设卡 + 自检清单 + 两档模式）
-├── assets/              # README 对比图与展示页预览（一次性产物）
+├── assets/              # README 对比图与展示页预览
 ├── docs/                # A/B 对比记录
-├── examples/            # A/B 对照产物（6 个单文件 HTML）
-└── scripts/             # 对比图合成脚本（含本机路径，仅作者本机可跑）
+└── examples/            # A/B 对照产物（6 个单文件 HTML）
 ```
 
 ## License
