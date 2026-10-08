@@ -4,7 +4,7 @@ id: verify.frontend-aesthetic.ab3
 name: A/B 验证实验 3 · 建筑静默风山间石屋
 status: active
 updated: 2026-10-05
-owner: A
+owner: <项目负责人>
 stage: 05
 ---
 

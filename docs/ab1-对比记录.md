@@ -4,7 +4,7 @@ id: verify.frontend-aesthetic.ab1
 name: A/B 验证实验 1 · Swiss 印刷风咖啡馆首页
 status: active
 updated: 2026-10-04
-owner: A
+owner: <项目负责人>
 stage: 05
 ---
 

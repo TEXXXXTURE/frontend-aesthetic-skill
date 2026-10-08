@@ -4,7 +4,7 @@ id: verify.frontend-aesthetic.ab2
 name: A/B 验证实验 2 · 氛围艺术风极光电台
 status: active
 updated: 2026-10-05
-owner: A
+owner: <项目负责人>
 stage: 05
 ---
 

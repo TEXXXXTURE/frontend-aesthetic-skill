@@ -5,7 +5,7 @@ name: frontend-aesthetic-skill
 version: 0.4
 status: draft
 updated: 2026-10-07
-owner: A
+owner: <项目负责人>
 origin: 前端审美 Skill 规划方案 v0.1（2026-10-04）；v0.2 = A/B 三连验证反哺禁区扩充（2026-10-05）；v0.3 = 新增卡 4 Munder 像素办公室风（2026-10-07，样本 005 源码解剖）；v0.4 = 色板维度升级为「用色逻辑」（四层模型 + 提取规范 + 卡 4 重写样板，2026-10-07）
 ---
 
